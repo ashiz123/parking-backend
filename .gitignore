@@ -1,0 +1,45 @@
+# Node modules
+node_modules/
+
+# Logs
+logs
+*.log
+npm-debug.log*
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# Dependency directories
+jspm_packages/
+
+# Build directories
+dist/
+build/
+
+# MacOS files
+.DS_Store
+
+# Windows files
+Thumbs.db
+
+# Coverage directory used by tools like Istanbul
+coverage/
+
+# Optional: build output directories for various frameworks
+.next/
+.nuxt/
+.svelte-kit/
+dist/
+
+# Optional: SASS Cache
+.sass-cache/
+
+# IDEs and Editors
+.vscode/
+.idea/
+
+# Optional: Miscellaneous system files
+ehthumbs.db
+Icon?
