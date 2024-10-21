@@ -10,6 +10,7 @@ const PORT = 3000
 // const userRoutes = require('./myapp/routes/auth');
 const authRoutes = require('./myapp/routes/authentication');
 const migrationRoutes = require('./myapp/routes/migration');
+const protectedRoutes = require('./myapp/routes/pages');
 
 
 //middleware
@@ -37,6 +38,7 @@ app.use(passport.session());
 // To run the migration (up to create and down to remove all databases)
 app.use('/migrate', migrationRoutes);
 app.use('/api/auth', authRoutes);
+app.use('/api/v1', protectedRoutes);
 // app.use('/test/auth', userRoutes)
 
 

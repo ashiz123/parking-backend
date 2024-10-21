@@ -1,21 +1,21 @@
-
 const pool  = require('../config/database_connection');
+const createParkingSpotTable = require('./create_parking_spot_table');
+const createParkingLotTable = require('./create_parking_lot_table');
+const createUserTable = require('./create_users_table');
 
 const createTables = async() => {
 
-    createUserTables = `CREATE TABLE IF NOT EXISTS users (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    firstname VARCHAR(255) NOT NULL,
-    lastname VARCHAR(255) NOT NULL,
-    email VARCHAR(255) UNIQUE NOT NULL,
-    password VARCHAR(255) NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-    );`; 
-
-
     try{
-        await pool.query(createUserTables);
+        console.log('Creating user table...');
+        await createUserTable(pool);  // Check if this is causing an issue
+
+        console.log('Creating parking lot table...');
+        await createParkingLotTable(pool); // Ensure this function is being executed
+
+        console.log('Creating parking spot table...');
+        await createParkingSpotTable(pool); // Same here
+
+        console.log('All tables created successfully');
     }
     catch(error){
         console.log('Error while creating table', error);
