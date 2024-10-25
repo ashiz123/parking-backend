@@ -10,6 +10,7 @@ const createParkingSpotTable = async(pool) =>
         AND table_name = 'parking_spots' ;
         `)
 
+
         if(rows[0].count > 0){
             console.log('table already exists');
             return{success: true, message: "Parking_spots table already exist"}
@@ -23,6 +24,8 @@ const createParkingSpotTable = async(pool) =>
                 total_spaces INT NOT NULL,
                 vehicle_type ENUM('Car', 'Lorry', 'Van', 'Motorcycle', 'ev') NOT NULL,
                 is_occupied BOOLEAN DEFAULT FALSE,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, -- Automatically sets the timestamp on creation
+                updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP, -- Updates the timestamp on update
 
                 FOREIGN KEY (parking_lot_id) REFERENCES parking_lots(id)
                 ON DELETE CASCADE
@@ -40,7 +43,7 @@ const createParkingSpotTable = async(pool) =>
     }
     catch(error){
         console.log('Error to create the table', error);
-        throw error;
+        throw new Error('Failed to create parking spots table');
     }
 }
 

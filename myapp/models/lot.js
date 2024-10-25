@@ -56,7 +56,7 @@ class LotModel{
         ]);
        
         return {
-            message : "Parking lot addedx successfully",
+            message : "Parking lot added successfully",
             id : results[0].insertId
         };
 
@@ -80,6 +80,4 @@ class LotModel{
 }
 
 
-
-const lot = new LotModel(pool);
-module.exports = lot;
+module.exports = new LotModel(pool);

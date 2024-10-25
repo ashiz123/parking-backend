@@ -1,5 +1,6 @@
 
-const {body} = require('express-validator');
+const {body, validationResult} = require('express-validator');
+
 
 const createSpotValidation =[
 
@@ -9,8 +10,10 @@ const createSpotValidation =[
     body('vehicle_type').notEmpty().withMessage('Vehicle type is required'),
     body('is_occupied').notEmpty().withMessage('Occupied must be boolean')
 
-
 ]
+
+
+
 
 module.exports = {
     createSpotValidation

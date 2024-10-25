@@ -1,34 +1,18 @@
-
-const { validationResult } = require('express-validator');
-const SpotModel = require('../models/spot'); 
+const parkingSpotService = require('../services/parkingSpotServices');
+const {handleError} = require('../utils/handleError'); 
 
 class SpotController{
 
 
     async addSpace(req, res)
     {
-        const errors = validationResult(req);
-
-        if(!errors.isEmpty()){
-            return res.status(400).json({ errors: errors.array() })
-        }
-
         try{
-          const spotId = await SpotModel.addParkingSpot(req.body);
-          if (spotId){
-            console.log('Spot created successfully', spotId);
-            res.status(200).json({ message : 'Parking spot created successfully'})
-          }else{
-            throw new Error('Failed to create parking spot');
-          }
+           const spotId = await parkingSpotService.addParkingSpot(req.body);
+           res.status(200).json({message : 'Parking spot created successsfully', spotId})
          
         }
         catch(error){
-            console.log('Error occured', error);
-            return res.status(500).json({
-                message: 'An error occurred while creating the parking spot',
-                error: error.message || 'Unknown error'
-            });
+            handleError(res, error)
         }
 
     }

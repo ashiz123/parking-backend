@@ -38,6 +38,6 @@ const pool = require('../config/database_connection');
  }
 
 
-const spotModel = new SpotModel(pool)
 
-module.exports = spotModel;
+
+module.exports = new SpotModel(pool);

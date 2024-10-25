@@ -13,7 +13,7 @@ const createLotValidation = [
 ]
 
 
-module.exports ={
+module.exports = {
     createLotValidation
 }
 

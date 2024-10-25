@@ -2,6 +2,7 @@ const pool  = require('../config/database_connection');
 const createParkingSpotTable = require('./create_parking_spot_table');
 const createParkingLotTable = require('./create_parking_lot_table');
 const createUserTable = require('./create_users_table');
+const createPricingTable = require('./create_pricing_table');
 
 const createTables = async() => {
 
@@ -14,6 +15,9 @@ const createTables = async() => {
 
         console.log('Creating parking spot table...');
         await createParkingSpotTable(pool); // Same here
+
+        console.log('Creating parking pricing table...');
+        await createPricingTable();
 
         console.log('All tables created successfully');
     }
