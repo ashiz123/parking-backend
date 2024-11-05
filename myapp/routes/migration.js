@@ -6,6 +6,7 @@ const dropTables = require('../migrations/drop_schema');
 const modifyParkingLotTable = require('../migrations/modify_pariking_lot_table');
 const pool  = require('../config/database_connection');
 const createPricingTable = require('../migrations/create_pricing_table');
+const createParkingVehicleTable = require('../migrations/create_parking_vehicle_table');
 
 
 
@@ -33,7 +34,7 @@ router.get('/down', async(req,res) => {
 
 
 
-
+//To modify table parking_lot temporary use
 router.get('/modify/parking_lot', async(req, res) => {
     await modifyParkingLotTable(pool);
     res.status(200).json({message: 'table modified successfully'});
@@ -58,6 +59,24 @@ catch(error){
         error: error?.message || 'An unknown error occurred',  // Use optional chaining and fallback
     });
 }
+})
+
+router.get('/parking_vehicle/up', async(req, res) => {
+    try{
+        const result = await createParkingVehicleTable();
+        console.log(result.message);
+        res.status(200).json({
+            success: true,
+            message: result.message
+        })
+    }
+    catch(error){
+        res.status(500).json({
+            success: false,
+            message: "failed to create the parking vehicle table",
+            error: error?.message || "An unknown error occured"
+        })
+    }
 })
 
 

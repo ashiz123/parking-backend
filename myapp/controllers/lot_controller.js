@@ -16,15 +16,14 @@ class LotController {
 
 
 
-    updateParkingLot(req, res)
+    async updateParkingLot(req, res)
     {
         console.log('update parking lot');
 
     }
 }
 
-// Create an instance of the controller
 const lotController = new LotController();
 
-// Export the instance
+
 module.exports = lotController;

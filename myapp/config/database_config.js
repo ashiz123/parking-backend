@@ -9,6 +9,7 @@ module.exports = {
         host: process.env.DB_HOST,
         dialect: process.env.DIALECT,  
         dvla : process.env.DVLA_API_KEY
+        
     },
     // Add configurations for other environments (test, production) as needed
 };

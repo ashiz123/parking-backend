@@ -1,21 +1,27 @@
 const express = require('express')
 const cors = require('cors');
 const session = require('express-session');
+require('dotenv').config();
+
 
 const app = express()
 var passport = require('passport');
 const bodyParser = require('body-parser');
 
-const PORT = 3000
+//middleware
+app.use(cors());
+app.use(express.json());
+
+
+
+const PORT = process.env.PORT || 3001;
 // const userRoutes = require('./myapp/routes/auth');
 const authRoutes = require('./myapp/routes/authentication');
 const migrationRoutes = require('./myapp/routes/migration');
 const protectedRoutes = require('./myapp/routes/pages');
 
 
-//middleware
-app.use(cors());
-app.use(express.json());
+
 
 
 // Middleware
