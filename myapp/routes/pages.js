@@ -23,8 +23,8 @@ router.post('/parking_lot/create', ensureAuthenticated,  upload.none(), createLo
 router.post('/parking_spot/create', ensureAuthenticated,  upload.none(), createSpotValidation, validationError,  spot_controller.addSpace);
 
 router.post('/get_vehicle_reg', vehicleRegController.getVehicleDetail);
-router.post('/entry_vehicle', upload.none(), validateVehicleEntryRequest,validationError,  vehicleController.addVehicle);
-router.post('/')
+router.post('/entry_vehicle', upload.none(), validateVehicleEntryRequest,validationError,  vehicleController.entryVehicle);
+router.put('/exit_vehicle', vehicleController.exitVehicle);
 
 
 
