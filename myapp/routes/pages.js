@@ -9,9 +9,11 @@ const spot_controller = require('../controllers/spot_controller');
 const {createLotValidation}  = require('../validations/lotValidation');
 const {createSpotValidation} = require('../validations/spotValidation');
 const validateVehicleEntryRequest = require('../validations/validateVehicleEntryRequest');
+const validateConfirmExitVehicle = require('../validations/validateConfirmExitVehicle')
 const {validationError} = require('../middlewares/validationError');
 const { vehicleRegController } = require('../controllers/vehicleReg_controller');
-const {vehicleController} = require('../controllers/vehicle_controller');
+const {reservationController} = require('../controllers/reservation_controller');
+const checkVehicleStatus = require('../middlewares/checkVehicleStatus');
 
 
 
@@ -21,41 +23,22 @@ const {vehicleController} = require('../controllers/vehicle_controller');
 //create parking lot
 router.post('/parking_lot/create', ensureAuthenticated,  upload.none(), createLotValidation, validationError,  lot_controller.createParkingLot);
 router.post('/parking_spot/create', ensureAuthenticated,  upload.none(), createSpotValidation, validationError,  spot_controller.addSpace);
+router.get('/parking_spots', spot_controller.getAllSpot )
+router.get('/parking_spots_by_lotId/:lot_id', spot_controller.getSpotsByLotId);
+router.get('/parking_spot_by_id/:id', spot_controller.getSpotById);
+
+
+
+
 
 router.post('/get_vehicle_reg', vehicleRegController.getVehicleDetail);
-router.post('/entry_vehicle', upload.none(), validateVehicleEntryRequest,validationError,  vehicleController.entryVehicle);
-router.put('/exit_vehicle', vehicleController.exitVehicle);
+router.post('/entry_vehicle', checkVehicleStatus, upload.none(), validateVehicleEntryRequest, validationError,  reservationController.entryVehicle);
+router.get('/confirm_exit_vehicle/:registeration',  reservationController.confirmExitVehicle);
+router.put('/exit_vehicle/:id', reservationController.exitVehicle);
 
 
 
 
-//get vehicle reg no
-// router.post('/get_vehicle_reg', async(req, res) => {
-   
-//   const{registrationNumber} = req.body
-//   const validation = vehicleRegValidation(registrationNumber);
-//     if (!validation.valid) {
-//         return res.status(400).json({ error: validation.error });
-//     }
-
-
-//     try{
-//         const {body} = req
-//         const response = await axios.post('https://driver-vehicle-licensing.api.gov.uk/vehicle-enquiry/v1/vehicles', body, {
-//             headers : {
-//                 'Content-Type' : 'application/json',
-//                 'x-api-key'  : process.env.DVLA_API_KEY, 
-                
-//             }
-//         });
-//        res.json(response.data)
-//     }
-//     catch(error){
-//         console.error('Error fetching data from DVLA API:', error); // Log error for debugging
-//         res.status(500).send('Error fetching data from DVLA API', error);
-//     }
-   
-// })
 
 module.exports = router;
 

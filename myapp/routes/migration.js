@@ -4,9 +4,12 @@ const router = express.Router();
 const createTables = require('../migrations/create_schema');
 const dropTables = require('../migrations/drop_schema');
 const modifyParkingLotTable = require('../migrations/modify_pariking_lot_table');
+const modifyParkingSpotTable = require('../migrations/modify_parking_spot_table');
 const pool  = require('../config/database_connection');
 const createPricingTable = require('../migrations/create_pricing_table');
-const createParkingVehicleTable = require('../migrations/create_parking_vehicle_table');
+const createReservationTable = require('../migrations/create_reservation_table');
+const createParkingPaymentTable = require('../migrations/create_parking_payment_table');
+// const createParkingSpotTable = require('../migrations/create_parking_spot_table');
 
 
 
@@ -35,9 +38,26 @@ router.get('/down', async(req,res) => {
 
 
 //To modify table parking_lot temporary use
-router.get('/modify/parking_lot', async(req, res) => {
+router.get('/parking_lot/modify', async(req, res) => {
     await modifyParkingLotTable(pool);
     res.status(200).json({message: 'table modified successfully'});
+})
+
+router.get('/parking_spots/modify', async(req, res) => {
+    try{
+        await modifyParkingSpotTable(pool);
+        res.status(200).json({
+        message : 'parking spot table modified successfully'
+        })
+    }
+    catch(error){
+        console.log(error);
+        res.json(500).json({
+            message: 'Error modifying parking spot',
+            error: error.message
+        });
+    }
+    
 })
 
 
@@ -61,9 +81,9 @@ catch(error){
 }
 })
 
-router.get('/parking_vehicle/up', async(req, res) => {
+router.get('/parking_reservation/up', async(req, res) => {
     try{
-        const result = await createParkingVehicleTable();
+        const result = await createReservationTable();
         console.log(result.message);
         res.status(200).json({
             success: true,
@@ -71,11 +91,31 @@ router.get('/parking_vehicle/up', async(req, res) => {
         })
     }
     catch(error){
+        console.log('migration, ', error.message);
         res.status(500).json({
             success: false,
-            message: "failed to create the parking vehicle table",
+            message: "failed to create the parking reservation table",
             error: error?.message || "An unknown error occured"
         })
+    }
+});
+
+router.get('/parking_payments/up', async(req, res) => {
+    try{
+        const result = await createParkingPaymentTable();
+        console.log('routes' , result.message);
+        res.status(200).json({
+            success: true,
+            message : result.message
+        })
+
+    }
+    catch(error){
+        res.status(500).json({
+            success: false,
+            message : error?.message || "An unknown error occured"
+        })
+
     }
 })
 
@@ -98,9 +138,9 @@ router.get('/parking_vehicle/up', async(req, res) => {
 //     }
 // })
 
-//To create parking_slots table
+// To create parking_slots table
 // router.get('/parking_spots/up', async(req, res) => {
-//     const result = await createParkingSpotTable();
+//     const result = await createParkingSpotTable(pool);
 //     if(result.success){
 //         res.status(200).json({message: result.message})
 //     }else{

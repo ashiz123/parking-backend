@@ -19,6 +19,33 @@ class ParkingSpotServices {
         }
     }
 
+    async getAllParkingSpots(){
+       try{
+        const allSpots = Spot.getAllParkingSpots();
+        return allSpots;
+       }
+
+       catch(error){
+        throw error;
+       }
+    }
+
+   
+    async filterByLotOrId(filteringBy, id){
+        try{
+            const spots = Spot.FilteringByLotOrId(filteringBy, id);
+            if(!spots){
+                throw new Error('Spots not found');
+            }
+
+            return spots;
+        }
+        catch(error){
+            console.log(error);
+            return error;
+        }
+    }
+
 
 
 

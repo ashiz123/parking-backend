@@ -28,8 +28,8 @@ const createParkingLotTable = async(pool) => {
                 max_height INT,
                 grouped BOOLEAN,
                 vehicle_allow_type VARCHAR(255),
-                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, -- Automatically sets the timestamp on creation
-                updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP, -- Updates the timestamp on update
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, 
+                updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP, 
 
                 FOREIGN KEY (user_id) REFERENCES users(id)
                 ON DELETE CASCADE

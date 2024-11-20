@@ -9,20 +9,18 @@ const pool = require('../config/database_connection');
 
 
 const checkTableExists = async(tableName) => {
+  
     const tableCheckQuery = `
         SELECT COUNT(*) AS count 
         FROM information_schema.tables
         WHERE table_schema = 'parking_app'
         AND table_name = ? ;
         `;
-
-        
-
-        try{
+         try{
             const [rows] = await pool.query(tableCheckQuery, [tableName]);
-
+           
             if(rows[0].count > 0){
-                console.log(`${tableName} already exists`);
+                console.log(`${tableName} already exists.`);
                 return {success: true, message : `${tableName} already exists`};
             }else{
                 console.log(`${tableName} is not exists`);

@@ -17,6 +17,46 @@ class SpotController{
 
     }
 
+    async getAllSpot(req, res){
+        try{
+            const allSpots = await parkingSpotService.getAllParkingSpots();
+            res.status(200).json({
+                message : "All spots",
+                data : allSpots
+            })
+        }
+        catch(error){
+            res.status(500).json('Cant retrieve all spots', error);
+        }
+    }
+
+     async getSpotsByLotId(req, res){
+        try{
+            const {lot_id} = req.params;
+            const filterByLotId = 'parking_lot_id'
+            const spots = await parkingSpotService.filterByLotOrId(filterByLotId, lot_id);
+            res.json(spots);
+          
+        }
+        catch(error){
+            console.log('error', error);
+            res.json(error);
+        }
+    }
+
+    async getSpotById(req, res){
+        try{
+            const {id} = req.params;
+            const filterById = 'id';
+            const spots = await parkingSpotService.filterByLotOrId(filterById, id);
+            res.json(spots);
+        }
+        catch(error){
+            console.log(error);
+            res.json(error);
+        }
+    }
+
     async updateSpace(location, filters ){
         // Add space for different types of vehicles
     }

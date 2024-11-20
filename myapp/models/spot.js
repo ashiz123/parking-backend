@@ -35,6 +35,42 @@ const pool = require('../config/database_connection');
     }
 
 
+    async getAllParkingSpots() {
+      const queryToGetParkingSpot = `
+          SELECT 
+              id,
+              parking_lot_id, 
+              total_spaces, 
+              vehicle_type,
+              is_occupied 
+          FROM parking_spots;
+      `;
+      
+      const [results] = await this.pool.query(queryToGetParkingSpot);
+      console.log(results);
+      return results;
+    }
+
+
+
+    async FilteringByLotOrId(filterBy, id){
+        console.log(filterBy, id);
+        const queryToFilterBy = `SELECT * FROM parking_spots WHERE ${filterBy} = ?`;
+        
+        try{
+            const [results] = await  this.pool.query(queryToFilterBy, [ id] );
+            console.log(results);
+            return results;
+        }
+        catch(error){
+            console.log('Error retrieving data by id', error);
+            throw error.message;
+        }
+
+
+    }
+
+
  }
 
 
