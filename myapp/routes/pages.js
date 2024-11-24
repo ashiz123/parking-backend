@@ -32,6 +32,7 @@ router.get('/parking_spot_by_id/:id', spot_controller.getSpotById);
 
 
 router.post('/get_vehicle_reg', vehicleRegController.getVehicleDetail);
+router.get('/check_vehicle_status/:reg_num', reservationController.checkVehicleStatus);
 router.post('/entry_vehicle', checkVehicleStatus, upload.none(), validateVehicleEntryRequest, validationError,  reservationController.entryVehicle);
 router.get('/confirm_exit_vehicle/:registeration',  reservationController.confirmExitVehicle);
 router.put('/exit_vehicle/:id', reservationController.exitVehicle);

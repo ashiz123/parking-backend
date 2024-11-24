@@ -84,15 +84,12 @@ class VehicleModel {
         const queryToCheckExist = `SELECT 1 FROM parking_vehicle WHERE vehicle_reg = ? AND exit_time IS NULL`;
         try{
             const [results] = await this.pool.query(queryToCheckExist, [reg_num]);
-            console.log(results);
-            if(results.length > 0){
-                return true;
-            }
+            return results.length > 0;
 
-            return false;
+
         }
 
-        catch(error){
+    catch(error){
             console.log(error);
             throw error;
         }

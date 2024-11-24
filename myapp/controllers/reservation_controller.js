@@ -23,11 +23,11 @@ class ReservationController{
 
     async confirmExitVehicle(req,res){
     
-        const {registeration} = req.params
+        const {reg_num} = req.params
 
 
         try{
-            const reservedVehicle = await parkingVehicleServices.confirmExitVehicle(registeration);
+            const reservedVehicle = await parkingVehicleServices.confirmExitVehicle(reg_num);
             res.status(200).json(reservedVehicle);
         }
 
@@ -58,6 +58,31 @@ class ReservationController{
             console.log( error)
             res.status(500).json(error);
         }
+    }
+
+
+    async checkVehicleStatus(req, res){
+        const {reg_num} = req.params;
+
+        try{
+            const isParking = await parkingVehicleServices.checkVehicleStatus(reg_num);
+            if(!isParking){
+                res.status(200).json({
+                    message : 'Vehicle parking not found',
+                    vehicle_parking : false
+                });
+            }else{
+                res.status(200).json({
+                    message : 'Vehicle parking ',
+                    vehicle_parking : true
+                });
+            }
+        }
+        catch(error){
+            console.log(error);
+            res.status(500).json({message : 'Vehicle parking ',error : error.message});
+        }
+
     }
 
    

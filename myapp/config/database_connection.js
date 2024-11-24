@@ -29,6 +29,6 @@ const checkConnection = async () => {
 };
 
 // Call the check connection function
-checkConnection();
+// checkConnection();
 
 module.exports = pool;

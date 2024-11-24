@@ -36,9 +36,9 @@ class ParkingVehicleServices {
         }
     }
 
-    async confirmExitVehicle(registeration){
+    async confirmExitVehicle(reg_num){
         try{
-            const vehicleDetail = await vehicleModel.confirmExitingVehicle(registeration);
+            const vehicleDetail = await vehicleModel.confirmExitingVehicle(reg_num);
             if(!vehicleDetail){
                 console.log('Vehicle detail to confirm for exit does not found');
                 throw new Error('Vehicle to confirm for exit is not in database');
@@ -47,6 +47,18 @@ class ParkingVehicleServices {
         }
         catch(error){
             console.log('Error in parking vehicle service', error);
+            throw error;
+        }
+    }
+
+    async checkVehicleStatus(reg_num){
+        try {
+            const getIsParking = await vehicleModel.checkVehicleExist(reg_num);
+            return getIsParking;
+        }
+
+        catch(error){
+            console.log('model error', error);
             throw error;
         }
     }
