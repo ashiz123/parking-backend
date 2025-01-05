@@ -1,25 +1,16 @@
+const checkTableExists = require("../utils/checkTableExists");
 
 
 
-const createParkingSpotTable = async(pool) => 
+const createParkingSpotTable = async(client) => 
 {
-    const [rows] = await pool.query(`
-        SELECT COUNT(*) AS count 
-        FROM information_schema.tables
-        WHERE table_schema = 'parking_app'
-        AND table_name = 'parking_spots' ;
-        `)
-
-
-        if(rows[0].count > 0){
-            console.log('table already exists');
-            return{success: true, message: "Parking_spots table already exist"}
-        }
-
+      const tableName = 'parking_spots';
 
         // title column is added but the other code is not set up for now
         try{
-            await pool.query(`
+            const result = await checkTableExists(tableName, client);
+            if(!result.success ){
+            await client.query(`
                 CREATE TABLE IF NOT EXISTS parking_spots(
                 id INT AUTO_INCREMENT PRIMARY KEY,
                 parking_lot_id INT,
@@ -41,12 +32,13 @@ const createParkingSpotTable = async(pool) =>
                         success : true,
                         message : "Parking spots table created"
                     }
+                }
                 
 
     }
     catch(error){
-        console.log('Error to create the table', error);
-        throw new Error('Failed to create parking spots table');
+        console.log('Error to create the parking spots table', error);
+        throw new Error(`Error while creating spots table: ${error.message}`);
     }
 }
 

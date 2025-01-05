@@ -1,22 +1,14 @@
+const checkTableExists = require("../utils/checkTableExists");
 
 
-const createUserTable  = async(pool) => {
+const createUserTable  = async(client) => {
 
-    const [rows] = await pool.query(`
-        SELECT COUNT(*) AS count 
-        FROM information_schema.tables
-        WHERE table_schema = 'parking_app'
-        AND table_name = 'users' ;
-        `)
-
-        if(rows[0].count > 0){
-            console.log('users table already exists');
-            return{success: true, message: "users table already exist"}
-        }
-    
+  const tableName = 'users';
     
         try{
-            await pool.query(
+            const result = await checkTableExists(tableName, client);
+            if(!result.success ){
+            await client.query(
                 `CREATE TABLE IF NOT EXISTS users (
                     id INT AUTO_INCREMENT PRIMARY KEY,
                     firstname VARCHAR(255) NOT NULL,
@@ -34,9 +26,11 @@ const createUserTable  = async(pool) => {
                 message : "users table created"
             }
         }
+        }
         catch(error){
-            console.log('Error while creating table', error);
-            throw error;
+            console.log('Error while creating user table', error);
+            throw new Error(`Error while creating user table: ${error.message}`);
+           
         }
 }
 

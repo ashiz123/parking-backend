@@ -25,10 +25,11 @@ const checkConnection = async () => {
         connection.release(); // Release the connection back to the pool
     } catch (err) {
         console.error('Error connecting to the database:', err);
+        throw err;
     }
 };
 
 // Call the check connection function
-// checkConnection();
+checkConnection();
 
 module.exports = pool;

@@ -6,14 +6,13 @@ const passport = require('passport');
 passport.use( new LocalStrategy(
   { usernameField: 'email' },  // Default is 'username', customize to 'email' if needed
   async (email, password, done) => {
-    // console.log('Email:', email);  // Check if email is passed correctly
-    // console.log('Password:', password);  // Check if password is passed correctly
+  
     try {
       // Find the user by email
       const [rows] = await pool.query('SELECT * FROM users WHERE email = ?', [email]);
       console.log(email);
       if (rows.length === 0) {
-        return done(null, false, { message: 'Incorrect email or password.' });
+        return done(null, false, { message: 'Incorrect email/ password.' });
       }
 
       const user = rows[0];

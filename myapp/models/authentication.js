@@ -14,6 +14,7 @@ class AuthenticationModel{
     try{
         //To check user registered
         const [rows] = await this.pool.query('SELECT * FROM users WHERE email = ?', [email]);
+
         if(rows.length > 0)
         {
             throw new Error('User is already created with this email')
@@ -34,7 +35,7 @@ class AuthenticationModel{
 
     catch(error){
         console.log('Error inserting the record', error);
-        throw new Error('database insertion error');
+        throw error;
     }
    
 }

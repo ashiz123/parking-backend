@@ -1,26 +1,29 @@
-const express = require('express')
+const express = require('express');
+const crypto = require('crypto');
+require('dotenv').config();
 const cors = require('cors');
 const session = require('express-session');
-require('dotenv').config();
-
 
 const app = express()
 var passport = require('passport');
 const bodyParser = require('body-parser');
 
+
+
 //middleware
-app.use(cors());
+const corsOptions = {
+  origin : 'http://localhost:3001',
+  credentials: true, // Allow credentials (cookies)
+} 
+
+
+
+app.use(cors(corsOptions));
 app.use(express.json());
 
 
 
-const PORT = process.env.PORT || 3001;
-// const userRoutes = require('./myapp/routes/auth');
-const authRoutes = require('./myapp/routes/authentication');
-const migrationRoutes = require('./myapp/routes/migration');
-const protectedRoutes = require('./myapp/routes/pages');
-
-
+const PORT = process.env.PORT || 3000;
 
 
 
@@ -29,16 +32,29 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 
-// Express session to store authentication 
-app.use(session({
-  secret: 'your_secret_key',
-  resave: false,
-  saveUninitialized: false,
-}));
+app.use(
+  session({
+    secret: process.env.LOGIN_SECRET_KEY,
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+      httpOnly: true, // Prevent client-side access to cookies
+      secure: false,  // Use `true` in production (requires HTTPS)
+      sameSite: 'none', // Allow cookies for cross-origin requests
+      maxAge: 86400000, // Session expires in 1 day
+      path: '/',      
+    },
+  })
+);
 
 //passport for authentication
 app.use(passport.initialize());
 app.use(passport.session());
+
+
+const authRoutes = require('./myapp/routes/authentication');
+const migrationRoutes = require('./myapp/routes/migration');
+const protectedRoutes = require('./myapp/routes/pages');
 
 // Route files
 // To run the migration (up to create and down to remove all databases)
@@ -49,7 +65,7 @@ app.use('/api/v1', protectedRoutes);
 
 
 app.get('/', (req, res) => {
-  res.send('testing World is again tested!')
+  res.send('testing World is again tested!');
 })
 
 // Start the server

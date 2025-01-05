@@ -8,20 +8,24 @@ class VehicleModel {
 
     
 
-    async addVehicleToPark({spot, vehicleDetail}){
+    async addVehicleToPark({section_id, lot_id, vehicle_reg, vehicle_make, vehicle_type, vehicle_year, entry_time }){
 
-        const parkingEntryVehicleQuery = `INSERT INTO parking_vehicle(
-            parking_spot_id,
+        // console.log('vehicle detail', vehicleDetail);
+        // console.log('section', section.id);
+
+       const parkingEntryVehicleQuery = `INSERT INTO reservation(
+            lot_id,
+            section_id,
             vehicle_reg,
             vehicle_type,
             vehicle_year,
             vehicle_make,
-            entry_time) VALUES (?, ?, ?, ?, ?, ? )` ;
+            entry_time) VALUES (?, ?, ?, ?, ?, ?, ? )` ;
 
 
         try{
          
-         const [results] = await this.pool.query(parkingEntryVehicleQuery, [spot.id, vehicleDetail.vehicle_reg, vehicleDetail.vehicle_type, vehicleDetail.vehicle_year, vehicleDetail.vehicle_make, vehicleDetail.entry_time])
+         const [results] = await this.pool.query(parkingEntryVehicleQuery, [lot_id, section_id, vehicle_reg, vehicle_type, vehicle_year, vehicle_make, entry_time])
          console.log(results);
          return results.insertId;    
 
@@ -36,7 +40,7 @@ class VehicleModel {
     async removeVehicleFromPark(registrationNumber, spot_id, exit_time){
 
         
-        const parkingExitVehicleQuery = `UPDATE parking_vehicle SET 
+        const parkingExitVehicleQuery = `UPDATE reservation SET 
         exit_time = ?
         WHERE vehicle_reg = ? AND parking_spot_id = ? AND exit_time IS NULL;
         `;
@@ -61,12 +65,12 @@ class VehicleModel {
     }
 
 
-    async confirmExitingVehicle(registeration){
+    async confirmExitingVehicle(reg_num){
         
-        const queryToGetVehicleDetail = `SELECT * FROM parking_vehicle WHERE vehicle_reg = ?`;
+        const queryToGetVehicleDetail = `SELECT * FROM reservation WHERE vehicle_reg = ?`;
         
         try{
-            const [results] = await this.pool.query(queryToGetVehicleDetail, [registeration]);
+            const [results] = await this.pool.query(queryToGetVehicleDetail, [reg_num]);
             if(results.length > 0){
                 return results;
             }
@@ -81,10 +85,13 @@ class VehicleModel {
     }
 
     async checkVehicleExist(reg_num){
-        const queryToCheckExist = `SELECT 1 FROM parking_vehicle WHERE vehicle_reg = ? AND exit_time IS NULL`;
+        const queryToCheckExist = `SELECT * FROM reservation WHERE vehicle_reg = ? AND exit_time IS NULL ORDER BY updated_at DESC
+            LIMIT 1`;
         try{
             const [results] = await this.pool.query(queryToCheckExist, [reg_num]);
-            return results.length > 0;
+            if(results.length > 0){
+                return results;
+            }
 
 
         }

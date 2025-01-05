@@ -3,13 +3,17 @@ const router = express.Router();
 
 const createTables = require('../migrations/create_schema');
 const dropTables = require('../migrations/drop_schema');
-const modifyParkingLotTable = require('../migrations/modify_pariking_lot_table');
+const modifyParkingLotTable = require('../migrations/modify_parking_lot_table');
 const modifyParkingSpotTable = require('../migrations/modify_parking_spot_table');
 const pool  = require('../config/database_connection');
 const createPricingTable = require('../migrations/create_pricing_table');
 const createReservationTable = require('../migrations/create_reservation_table');
 const createParkingPaymentTable = require('../migrations/create_parking_payment_table');
+const addTitleInSpotTable = require("../migrations/add_title_in_spot_table");
+const createParkingSectionsTable = require('../migrations/create_parking_sections_table');
 // const createParkingSpotTable = require('../migrations/create_parking_spot_table');
+
+
 
 
 
@@ -19,7 +23,8 @@ try{
     res.status(200).json({message : 'table created successfully'});
 }
 catch(error){
-    console.log('Error creating table', error)
+    console.log('Error creating table', error);
+    res.status(500).json({ message: 'Failed to create table', error: error.message });
 }
     
 })
@@ -116,6 +121,29 @@ router.get('/parking_payments/up', async(req, res) => {
             message : error?.message || "An unknown error occured"
         })
 
+    }
+})
+
+router.get('/add_title_in_parking_spot', async(req, res) => {
+    try{
+        await addTitleInSpotTable(pool);
+        res.status(200).json({message : 'Add title in spot'});
+    }
+
+    catch(error){
+        res.status(500).json({message : error?.message || "An unknown error occured"});
+    }
+})
+
+router.get('/parking_sections/up', async(req, res) => {
+    try{
+        const result = await createParkingSectionsTable();
+        res.status(200).json({message : result?.message});
+    }
+    catch(error){
+        res.status(500).json({
+            message : error?.message || 'An unknow error occured'
+        })
     }
 })
 

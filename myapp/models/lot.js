@@ -10,7 +10,9 @@ class LotModel{
 
     async addParkingLot({user_id,
         name,
-        location,
+        postcode,
+        state,
+        city,
         latitude,
         longitude,
         total_spots,
@@ -27,7 +29,9 @@ class LotModel{
                 INSERT INTO parking_lots (
                     user_id, 
                     name, 
-                    location, 
+                    postcode,
+                    state,
+                    city,
                     latitude, 
                     longitude, 
                     total_spots, 
@@ -37,14 +41,16 @@ class LotModel{
                     grouped, 
                     vehicle_allow_type
                 ) 
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                 
             `;
 
         const results = await this.pool.query(createLotQuery,  [
             user_id,
             name,
-            location,
+            postcode,
+            state,
+            city,
             latitude,
             longitude,
             total_spots,
@@ -71,6 +77,26 @@ class LotModel{
         
 
         
+    }
+
+    async getParkingLotsByUserId(id){
+       
+        const queryLots = `SELECT * FROM parking_lots WHERE user_id = ?`;
+        const [results] = await this.pool.query(queryLots, [id]);
+        return results;
+    } 
+
+
+    async decreaseOccupiedOnParkingLot(lotId){
+        const getLot = `UPDATE parking_lots SET occupied_spaces = occupied_spaces + 1 WHERE id = ?`;
+        const [results] = await this.pool.query(getLot, [lotId]);
+        return results;
+    }
+
+    async getParkingLotByLotId(lotId){
+        const getLotByLotId = `SELECT * FROM parking_lots WHERE ID = ?`;
+        const [results] = await this.pool.query(getLotByLotId, [lotId]);
+        return results;
     }
 
 

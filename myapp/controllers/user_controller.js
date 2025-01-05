@@ -7,6 +7,7 @@ class UserController{
 
 async register(req, res){
     try{
+    
     const{first_name, last_name, email, password} = req.body;
 
     if(!first_name || !last_name || !email || !password){

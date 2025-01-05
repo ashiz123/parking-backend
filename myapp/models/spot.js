@@ -9,18 +9,19 @@ const pool = require('../config/database_connection');
     }
 
 
-    async addParkingSpot({parking_lot_id, total_spaces, vehicle_type, is_occupied})
+    async addParkingSpot({parking_lot_id, title,  total_spaces, vehicle_type, is_occupied})
     {
         
      try{
         const createSpotQuery = `INSERT INTO parking_spots(
         parking_lot_id,
+        title,                  
         total_spaces,
         vehicle_type,
         is_occupied
-        ) VALUES (?, ?, ?, ?)` ;
+        ) VALUES (?, ?,  ?, ?, ?)` ;
 
-        const results = await this.pool.query(createSpotQuery, [parking_lot_id, total_spaces, vehicle_type, is_occupied]);
+        const results = await this.pool.query(createSpotQuery, [parking_lot_id, title,  total_spaces, vehicle_type, is_occupied]);
 
         return {
             message : "Parking spot added successfully", 

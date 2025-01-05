@@ -1,4 +1,5 @@
 const vehicleModel = require('../models/vehicle');
+const LotModel = require('../models/lot');
 
 
 class ParkingVehicleServices {
@@ -6,14 +7,15 @@ class ParkingVehicleServices {
     async vehicleEntryToParking(data){
         try{
             const vehicleId = await vehicleModel.addVehicleToPark(data)
-            console.log('vehicleId', vehicleId);
             if(!vehicleId){
                 console.log('error here');
                 throw new Error('Failed to add vehicle to park')
             }
-            return vehicleId;
+            await LotModel.decreaseOccupiedOnParkingLot(1);
+            return 
         }
         catch(error){
+            console.log(error);
             throw error;
         }
     }
@@ -53,8 +55,9 @@ class ParkingVehicleServices {
 
     async checkVehicleStatus(reg_num){
         try {
-            const getIsParking = await vehicleModel.checkVehicleExist(reg_num);
-            return getIsParking;
+            const parkedVehicle = await vehicleModel.checkVehicleExist(reg_num);
+            console.log(parkedVehicle);
+            return parkedVehicle;
         }
 
         catch(error){

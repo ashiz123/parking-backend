@@ -20,10 +20,39 @@ class ParkingLotService{
         }
         catch(error)
         {
+            console.log(error);
             throw error;
+           
         }
         
 
+    }
+
+    async getParkingLots(id){
+        try{
+          
+            const parkingLots = await LotModel.getParkingLotsByUserId(id);
+            console.log(parkingLots);
+            return parkingLots;
+        }
+        catch(error){
+            console.log(error);
+            throw error;
+        }
+    }
+
+    
+    
+    async getParkingLotByLotId(lotId){
+        try{
+            const parkingLot = await LotModel.getParkingLotByLotId(lotId);
+            console.log(parkingLot);
+            return parkingLot;
+        }
+        catch(error){
+            console.log(error);
+            throw error;
+        }
     }
 
 

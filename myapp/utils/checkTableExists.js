@@ -1,6 +1,4 @@
 
-const pool = require('../config/database_connection');
-
 /**
  * Check if a table exists in the database.
  * @param {string} tableName - The name of the table to check.
@@ -8,7 +6,7 @@ const pool = require('../config/database_connection');
  */
 
 
-const checkTableExists = async(tableName) => {
+const checkTableExists = async(tableName, client) => {
   
     const tableCheckQuery = `
         SELECT COUNT(*) AS count 
@@ -17,7 +15,7 @@ const checkTableExists = async(tableName) => {
         AND table_name = ? ;
         `;
          try{
-            const [rows] = await pool.query(tableCheckQuery, [tableName]);
+            const [rows] = await client.query(tableCheckQuery, [tableName]);
            
             if(rows[0].count > 0){
                 console.log(`${tableName} already exists.`);

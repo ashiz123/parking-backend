@@ -15,6 +15,7 @@ class ParkingSpotServices {
         }
         catch(error)
         {
+            console.log(error);
             throw error
         }
     }
@@ -26,6 +27,7 @@ class ParkingSpotServices {
        }
 
        catch(error){
+        console.log(error);
         throw error;
        }
     }

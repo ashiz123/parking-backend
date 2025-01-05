@@ -1,32 +1,31 @@
+const checkTableExists = require("../utils/checkTableExists");
 
 
 
-const createParkingLotTable = async(pool) => {
+const createParkingLotTable = async(client) => {
 
-    const [rows] = await pool.query(`
-        SELECT COUNT(*) AS count FROM information_schema.tables 
-        WHERE table_schema = 'parking_app'
-        AND table_name = 'parking_lots' ; `);
-
-
-        if (rows[0].count > 0) {
-            return { success: false, message: "Parking Lot table already exists." };
-        }
+ const tableName = 'parking_lots'
 
     try{
-        await pool.query(
+        const result = await checkTableExists(tableName, client);
+        if(!result.success ){
+        await client.query(
             `CREATE TABLE IF NOT EXISTS parking_lots (
                 id INT AUTO_INCREMENT PRIMARY KEY,
                 user_id INT,
                 name VARCHAR(255) NOT NULL,
-                location VARCHAR(255) NOT NULL,
-                latitude DECIMAL(10, 8),
-                longitude DECIMAL(11, 8),
+                postcode VARCHAR(255) NULL,
+                state VARCHAR(255) NOT NULL,
+                city VARCHAR(255) NOT NULL,
+                latitude DECIMAL(9, 6),
+                longitude DECIMAL(9, 6),    
                 total_spots INT UNSIGNED,
+                occupied_spaces INT DEFAULT 0 NOT NULL,
+                reserved_spaces INT DEFAULT 0 NOT NULL,
                 security_features VARCHAR(255),
                 surface_type  ENUM('Grass', 'Concrete', 'Asphalt', 'Gravel', 'Dirt'),
                 max_height INT,
-                grouped BOOLEAN,
+                grouped BOOLEAN DEFAULT 0 NOT NULL,       
                 vehicle_allow_type VARCHAR(255),
                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, 
                 updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP, 
@@ -38,13 +37,17 @@ const createParkingLotTable = async(pool) => {
             )
         console.log('parking lot table successfully created');
         return { success: true, message: "Parking Lot table created successfully!" };
+        }
     }
 
     catch(error){
-        console.error('Error connecting to database:', error);
+        console.error('Error creating parking lots', error);
         throw error;
     }
 }
+
+
+
 
 
 module.exports = createParkingLotTable;

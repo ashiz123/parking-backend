@@ -1,15 +1,15 @@
 const  checkTableExists  = require('../utils/checkTableExists');
-const pool = require('../config/database_connection');
 
 
-const createPricingTable = async() => {
+
+const createPricingTable = async(client) => {
 
     const tableName = 'parking_pricing';
 
     try{
-        const result = await checkTableExists(tableName);
+        const result = await checkTableExists(tableName, client);
         if(!result.success ){
-            await pool.query(`
+            await client.query(`
                 CREATE TABLE IF NOT EXISTS parking_pricing(
                 id INT AUTO_INCREMENT PRIMARY KEY,
                 parking_spot_id INT,

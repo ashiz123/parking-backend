@@ -14,6 +14,31 @@ class LotController {
        }
     }
 
+    async getParkingLotsById(req, res)
+    {
+        const {user_id} = req.params;
+        try{
+            const parkingLots = await parkingLotService.getParkingLots(user_id);
+            res.json(parkingLots);
+        }
+        catch(error){
+            handleError(res, error)
+        }
+        
+    }
+
+
+    async getParkingLotByLotId(req, res){
+        const {lot_id} = req.params;
+        try{
+            const parkingLot = await parkingLotService.getParkingLotByLotId(lot_id);
+            res.json(parkingLot);
+        }
+        catch(error){
+            handleError(res, error);
+        }
+    }
+
 
 
     async updateParkingLot(req, res)
@@ -21,6 +46,8 @@ class LotController {
         console.log('update parking lot');
 
     }
+
+ 
 }
 
 const lotController = new LotController();

@@ -1,27 +1,30 @@
 
 const  checkTableExists  = require('../utils/checkTableExists');
-const pool = require('../config/database_connection');
 
-const createReservationTable = async() => {
+
+const createReservationTable = async(client) => {
 
     const tableName = 'reservation';
 
     try{
-        const result = await checkTableExists(tableName);
+        const result = await checkTableExists(tableName, client);
         if(!result.success){
-            await pool.query(`
+            await client.query(`
                 CREATE TABLE reservation (
                 id INT AUTO_INCREMENT PRIMARY KEY, 
-                parking_spot_id INT NULL,
+                lot_id INT NOT NULL, 
+                section_id INT NULL,
                 vehicle_reg VARCHAR(55),
                 vehicle_type VARCHAR(55),
                 vehicle_year  INT, 
                 vehicle_make VARCHAR(55),
                 entry_time TIMESTAMP NOT NULL,
                 exit_time TIMESTAMP NULL,
-                status TINYINT(1) DEFAULT 0, 
+                status TINYINT(1) DEFAULT 0,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 
-                FOREIGN KEY (parking_spot_id) REFERENCES parking_spots(id)
+                FOREIGN KEY (section_id) REFERENCES parking_sections(id)
                 ON DELETE CASCADE
                 ON UPDATE CASCADE
                 );`)
@@ -40,8 +43,8 @@ const createReservationTable = async() => {
 
     catch(error)
     {
-        console.log("Error connecting to database", error.message);
-        throw error;
+        console.log("Error creating reservation table", error.message);
+        throw new Error(`Error while creating reservation table: ${error.message}`);
     }
     
 
