@@ -55,6 +55,18 @@ class ParkingLotService{
         }
     }
 
+    async activateLot(userId, lotId){
+        try{
+            const parkingLotId = await LotModel.activateParkingLot(userId, lotId);
+            return parkingLotId;
+        }
+        catch(error){
+            console.log(error);
+            throw error;
+        }
+
+    }
+
 
 
 

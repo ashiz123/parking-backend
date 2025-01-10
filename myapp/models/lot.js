@@ -101,6 +101,25 @@ class LotModel{
 
 
 
+    async activateParkingLot(userId, lotId){
+       try{
+            const queryToActivateLot = `INSERT INTO user_lot_activate(user_id, lot_id) VALUES (?, ?)`;
+            const results = await this.pool.query(queryToActivateLot, [userId, lotId]);    
+            console.log(results);
+            return {
+                message : "Parking lot selected",
+                lot : results[0].insertId
+            }
+        }
+        catch(error){
+            console.log(error);
+            throw new Error( 'Issue while selecting lot for user')
+        }
+
+    }
+
+
+
 
 
 }

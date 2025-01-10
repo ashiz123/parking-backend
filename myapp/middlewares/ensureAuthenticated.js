@@ -1,9 +1,10 @@
 
 const ensureAuthenticated = (req, res, next) =>{
-   console.log(req.session.user);
+
     if(req.isAuthenticated()){
         return next();
     }
+    console.log('not authenticated');
     res.status(400).json({message : "Not Authenticated"})
 }   
 

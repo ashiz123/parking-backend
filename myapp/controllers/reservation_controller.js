@@ -1,6 +1,6 @@
 
 const parkingVehicleServices = require('../services/parkingVehicleServices');
-const {handleError} = require('../utils/handleError'); 
+
 
 class ReservationController{
 
@@ -17,7 +17,7 @@ class ReservationController{
         }
         catch(error){
             console.log('congtroller error', error);
-            res.json(500).json('Error From controller', error);
+            res.status(500).json('Error From controller', error);
         }
       }
 

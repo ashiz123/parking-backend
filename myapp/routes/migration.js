@@ -11,6 +11,7 @@ const createReservationTable = require('../migrations/create_reservation_table')
 const createParkingPaymentTable = require('../migrations/create_parking_payment_table');
 const addTitleInSpotTable = require("../migrations/add_title_in_spot_table");
 const createParkingSectionsTable = require('../migrations/create_parking_sections_table');
+const createUserLotSelectionTable = require('../migrations/create_user_lot_selection_table');
 // const createParkingSpotTable = require('../migrations/create_parking_spot_table');
 
 
@@ -144,6 +145,23 @@ router.get('/parking_sections/up', async(req, res) => {
         res.status(500).json({
             message : error?.message || 'An unknow error occured'
         })
+    }
+})
+
+router.get('/user_lot_activate/up', async(req, res) => {
+    try{
+        const result = await createUserLotSelectionTable();
+        if(result.success){
+            res.status(200).json({
+                message : 'user lot activate table created successfully'
+            })
+        }
+        throw new Error('Table can not be created');
+       
+    }
+    catch(error){
+        console.log(error);
+        throw error;
     }
 })
 
