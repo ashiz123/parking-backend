@@ -1,13 +1,18 @@
 const express = require('express');
-const crypto = require('crypto');
-require('dotenv').config();
+// const crypto = require('crypto');
+require('dotenv').config(); //to get the data of .env
 const cors = require('cors');
 const session = require('express-session');
+
 
 const app = express()
 var passport = require('passport');
 const bodyParser = require('body-parser');
 
+
+
+// const jwtSecret = crypto.randomBytes(64).toString('hex');
+// console.log('Generated JWT Secret:', jwtSecret);
 
 
 //middleware

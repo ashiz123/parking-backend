@@ -3,7 +3,7 @@ const recordService = require("../services/parkingRecordServices");
 
 class RecordController {
 
-    async getParkingVehicle(req, res){
+    async getParkingVehicleByUserId(req, res){
         const{userId} = req.params;
         
         try{
@@ -19,6 +19,21 @@ class RecordController {
 
        
       
+    }
+
+
+    async getParkingVehicleByLotId(req, res){
+        const {lotId} = req.params;
+        try{
+            const parkingRecords = await recordService.getParkingRecordsByLotId(lotId);
+            res.status(200).json(parkingRecords);
+        }
+        catch(error){
+            console.log(error);
+            res.status(500).json({
+                "message" : error.message
+            })
+        }
     }
 
 }

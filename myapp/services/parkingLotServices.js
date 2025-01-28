@@ -68,6 +68,17 @@ class ParkingLotService{
     }
 
 
+    async updataParkingSpace(lotId){
+        try{
+
+        }
+        catch(error){
+            console.log(error);
+            throw error;
+        }
+    }
+
+
 
 
 

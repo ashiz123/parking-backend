@@ -1,5 +1,6 @@
 const pool = require('../config/database_connection'); // MySQL connection
 const { body, validationResult } = require('express-validator');
+const hashPassword = require('../utils/hashPassword');
 
 class LotModel{
 
@@ -20,10 +21,15 @@ class LotModel{
         surface_type,
         max_height,
         grouped,
-        vehicle_allow_type})
+        vehicle_allow_type,
+        login_pin
+    })
     {
+
     
         try{
+            const hashedPin = await hashPassword(login_pin);
+            console.log(hashedPin);
         //    insert query
             const createLotQuery = `
                 INSERT INTO parking_lots (
@@ -39,9 +45,10 @@ class LotModel{
                     surface_type, 
                     max_height, 
                     grouped, 
-                    vehicle_allow_type
+                    vehicle_allow_type, 
+                    login_pin
                 ) 
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                 
             `;
 
@@ -58,7 +65,8 @@ class LotModel{
             surface_type,
             max_height,
             grouped,
-            vehicle_allow_type
+            vehicle_allow_type,
+            hashedPin
         ]);
        
         return {
@@ -71,8 +79,8 @@ class LotModel{
         }
         catch(error)
         {
-            console.log(error);
-            throw new Error('Error occurred while creating parking lot');
+            console.log('error in model', error);
+            throw error;
         }
         
 
@@ -87,9 +95,15 @@ class LotModel{
     } 
 
 
-    async decreaseOccupiedOnParkingLot(lotId){
+    async increaseOccupiedOnParkingLot(lotId){
         const getLot = `UPDATE parking_lots SET occupied_spaces = occupied_spaces + 1 WHERE id = ?`;
         const [results] = await this.pool.query(getLot, [lotId]);
+        return results;
+    }
+
+    async increaseOccupiedOnParkingSection(sectionId){
+        const getLot = `UPDATE parking_sections SET occupied_spaces = occupied_spaces + 1 WHERE id = ?`;
+        const [results] = await this.pool.query(getLot, [sectionId]);
         return results;
     }
 
@@ -117,6 +131,8 @@ class LotModel{
         }
 
     }
+
+   
 
 
 

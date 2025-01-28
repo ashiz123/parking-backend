@@ -17,7 +17,9 @@ const { vehicleRegController } = require('../controllers/vehicleReg_controller')
 const {reservationController} = require('../controllers/reservation_controller');
 const {recordController} = require('../controllers/record_controller');
 const checkVehicleStatus = require('../middlewares/checkVehicleStatus');
-const { RAW } = require('sequelize/lib/query-types');
+const lot_auth_controller = require('../controllers/lot_auth_controller');
+const authenticateLot = require('../middlewares/authenticateLotToken');
+
 
 
 
@@ -35,11 +37,14 @@ router.get('/parking_lots_by_auth_user',ensureAuthenticated,  lotController.geLo
 
 //SET PARKING LOT
 router.post('/parking_lots/activate_lot',upload.none(), ensureAuthenticated, lotController.setActiveLot);
+router.post('/lot/login', upload.none(), lot_auth_controller.loginParkingLot);
+router.get('/lot/getAuthLot', authenticateLot, lot_auth_controller.getLot);
 
 //SECTION
 router.post('/parking_section', ensureAuthenticated, upload.none(), sectionContoller.createSection);
 router.get('/parking_sections_by_lotId/:lotId', upload.none(), sectionContoller.getSectionsByLotId);
 router.get('/parking_section_by_id/:id', upload.none(), sectionContoller.getSectionBySectionId);
+router.get('/')
 
 
 //SPOT IS NOT USED FOR NOW
@@ -50,20 +55,25 @@ router.get('/parking_spot_by_id/:id', spot_controller.getSpotById);
 
 
 //RESERVATION 
-router.get('/check_vehicle_status/:reg_num', reservationController.checkVehicleStatus);
+router.get('/check_vehicle_status/:reg_num',  reservationController.checkVehicleStatus);
 router.post('/entry_vehicle', checkVehicleStatus, upload.none(), validateVehicleEntryRequest, validationError,  reservationController.entryVehicle);
 router.get('/confirm_exit_vehicle/:reg_num',  reservationController.confirmExitVehicle);
 router.put('/exit_vehicle/:id', reservationController.exitVehicle);
 
 //PARKING RECORD
-router.get('/get_parking_records/:userId', recordController.getParkingVehicle);
+router.get('/get_parking_records_byUser/:userId', recordController.getParkingVehicleByUserId); //authenticate by user
+router.get('/get_parking_records_byLot/:lotId', recordController.getParkingVehicleByLotId);
 
 
 //STRIPE 
 router.post('/create_payment_intent', upload.none(), payment_controller.createPaymentIntent);
 
 
-//SET PARKING LOT
+// router.get('/protected', authenticateLot, (req, res) => {
+//     res.json({
+//         message : req.lot
+//     });
+// })
 
 
 module.exports = router;

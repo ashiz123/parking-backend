@@ -4,8 +4,8 @@ const modifyParkingLotTable  = async(pool) => {
     try{
         await pool.query(`
             ALTER TABLE parking_lots
-            ADD occupied_space INT default 0 NOT NULL AFTER total_spots, 
-            ADD reserved_space INT default 0 NOT NULL AFTER total_spots;
+            ADD login_status INT default 0 NOT NULL AFTER vehicle_allow_type, 
+            ADD login_pin INT AFTER login_status;
             `)
 
         console.log("Parking lot table modified successfully");

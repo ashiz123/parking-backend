@@ -6,12 +6,18 @@ class ParkingVehicleServices {
 
     async vehicleEntryToParking(data){
         try{
-            const vehicleId = await vehicleModel.addVehicleToPark(data)
-            if(!vehicleId){
+            const reservation = await vehicleModel.addVehicleToPark(data)
+            if(!reservation){
                 console.log('error here');
                 throw new Error('Failed to add vehicle to park')
             }
-            await LotModel.decreaseOccupiedOnParkingLot(1);
+            if(reservation.sectionId){
+                await LotModel.increaseOccupiedOnParkingLot(reservation.lotId);
+                await LotModel.increaseOccupiedOnParkingSection(reservation.sectionId)
+            }else{
+                await LotModel.increaseOccupiedOnParkingLot(reservation.lotId);
+            }
+           
             return 
         }
         catch(error){

@@ -27,7 +27,11 @@ class VehicleModel {
          
          const [results] = await this.pool.query(parkingEntryVehicleQuery, [lot_id, section_id, vehicle_reg, vehicle_type, vehicle_year, vehicle_make, entry_time])
          console.log(results);
-         return results.insertId;    
+         return {
+            insertId : results.insertId,
+            lotId : lot_id,
+            sectionId : section_id
+         };    
 
             
         }

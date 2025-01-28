@@ -12,7 +12,7 @@ const createParkingPaymentTable = require('../migrations/create_parking_payment_
 const addTitleInSpotTable = require("../migrations/add_title_in_spot_table");
 const createParkingSectionsTable = require('../migrations/create_parking_sections_table');
 const createUserLotSelectionTable = require('../migrations/create_user_lot_selection_table');
-// const createParkingSpotTable = require('../migrations/create_parking_spot_table');
+
 
 
 
@@ -166,32 +166,6 @@ router.get('/user_lot_activate/up', async(req, res) => {
 })
 
 
-// To create parking_lots table
-// router.get('/parking_lot/up', async(req, res) => {
 
-//     try{
-//         const result = await createParkingLotTable();
-//         if(result.success){
-//             res.status(200).json({message : result.message});
-//         }else{
-//             res.status(400).json({message : result.message})
-//         }
-       
-//     }
-//     catch(error){
-//         console.error('Error occurred:', error); // Log the error for debugging
-//         res.status(500).json({ message: "Error creating Parking Lot table", error: error.message });
-//     }
-// })
-
-// To create parking_slots table
-// router.get('/parking_spots/up', async(req, res) => {
-//     const result = await createParkingSpotTable(pool);
-//     if(result.success){
-//         res.status(200).json({message: result.message})
-//     }else{
-//         res.status(500).json({message: "Error creating parking slots table ", error: error.message});
-//     }
-// })
 
 module.exports = router;
