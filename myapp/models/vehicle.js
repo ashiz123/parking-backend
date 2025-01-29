@@ -41,19 +41,21 @@ class VehicleModel {
         }
     }
 
-    async removeVehicleFromPark(registrationNumber, spot_id, exit_time){
+    async removeVehicleFromPark(registration_number, exit_time ){
 
         
-        const parkingExitVehicleQuery = `UPDATE reservation SET 
-        exit_time = ?
-        WHERE vehicle_reg = ? AND parking_spot_id = ? AND exit_time IS NULL;
+     
+        
+        const parkingExitVehicleQuery = `UPDATE reservation 
+        SET exit_time = ?, status = 1
+        WHERE vehicle_reg = ? 
+        AND exit_time IS NULL;
         `;
-
-        const params = [exit_time, registrationNumber, spot_id];
+        const params = [exit_time, registration_number];
 
         try{
             const [results] = await this.pool.execute(parkingExitVehicleQuery, params);
-            
+            console.log(results);
 
             if(results.affectedRows === 0){
                 console.log("No matching vehicle found to update.");

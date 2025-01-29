@@ -44,7 +44,7 @@ router.get('/lot/getAuthLot', authenticateLot, lot_auth_controller.getLot);
 router.post('/parking_section', ensureAuthenticated, upload.none(), sectionContoller.createSection);
 router.get('/parking_sections_by_lotId/:lotId', upload.none(), sectionContoller.getSectionsByLotId);
 router.get('/parking_section_by_id/:id', upload.none(), sectionContoller.getSectionBySectionId);
-router.get('/')
+
 
 
 //SPOT IS NOT USED FOR NOW
@@ -58,7 +58,7 @@ router.get('/parking_spot_by_id/:id', spot_controller.getSpotById);
 router.get('/check_vehicle_status/:reg_num',  reservationController.checkVehicleStatus);
 router.post('/entry_vehicle', checkVehicleStatus, upload.none(), validateVehicleEntryRequest, validationError,  reservationController.entryVehicle);
 router.get('/confirm_exit_vehicle/:reg_num',  reservationController.confirmExitVehicle);
-router.put('/exit_vehicle/:id', reservationController.exitVehicle);
+router.put('/exit_vehicle/:vehicle_reg', reservationController.exitVehicle);
 
 //PARKING RECORD
 router.get('/get_parking_records_byUser/:userId', recordController.getParkingVehicleByUserId); //authenticate by user

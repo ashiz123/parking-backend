@@ -47,11 +47,14 @@ class ReservationController{
 
     async exitVehicle(req, res){
 
-        const {registration_number,parking_spot_id, exit_time, } = req.body;
-        const taken_exit_time = exit_time || new Date();
+        const {vehicle_reg } = req.params;
+        const exit_time =  new Date().toISOString().slice(0, 19).replace('T', ' ');
 
+
+        console.log(vehicle_reg, 'reg');
+        
         try{
-            const updated = await parkingVehicleServices.vehicleExitFromParking(registration_number, parking_spot_id, taken_exit_time);
+            const updated = await parkingVehicleServices.vehicleExitFromParking(vehicle_reg, exit_time);
             if(updated){
                 res.status(200).json("Vehicle exit successfully");
             }
