@@ -2,7 +2,14 @@ const mysql = require('mysql2/promise');
 const config = require('./database_config');
 
 const env = process.env.NODE_ENV || 'development';
+
+if(!config[env]){
+    throw new Error(`Configuration for environment "${env} is undefined.`)
+}
+
+
 const { username, password, database, host } = config[env];
+console.log(username, password, database, host );
 
 const pool = mysql.createPool({
     host: host,

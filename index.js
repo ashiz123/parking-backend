@@ -10,6 +10,12 @@ var passport = require('passport');
 const bodyParser = require('body-parser');
 
 
+console.log("DB_HOST:", process.env.DB_HOST);
+console.log("DB_USERNAME:", process.env.DB_USERNAME);
+console.log("DB_PASSWORD:", process.env.DB_PASSWORD);
+console.log("DB_DATABASE:", process.env.DB_DATABASE);
+
+
 
 // const jwtSecret = crypto.randomBytes(64).toString('hex');
 // console.log('Generated JWT Secret:', jwtSecret);
