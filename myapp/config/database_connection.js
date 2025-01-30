@@ -3,9 +3,12 @@ const config = require('./database_config');
 
 const env = process.env.NODE_ENV || 'development';
 
+
 if(!config[env]){
     throw new Error(`Configuration for environment "${env} is undefined.`)
 }
+
+console.log("NODE_ENV:", process.env.NODE_ENV);
 
 
 const { username, password, database, host } = config[env];
