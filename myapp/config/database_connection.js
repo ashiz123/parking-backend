@@ -5,7 +5,7 @@ const env = process.env.NODE_ENV || 'development';
 
 
 if(!config[env]){
-    throw new Error(`Configuration for environment "${env} is undefined.`)
+    throw new Error(`Configuration for environment "${env}" is undefined.`)
 }
 
 console.log("NODE_ENV:", process.env.NODE_ENV);
